@@ -1,3 +1,5 @@
+//day la nhanh cua em Toan
+
 print("Sensors and Actuators")
 
 import time
