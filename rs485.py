@@ -29,6 +29,7 @@ except:
 
 def serial_read_data(ser):
     bytesToRead = ser.inWaiting()
+   
     if bytesToRead > 0:
         out = ser.read(bytesToRead)
         data_array = [b for b in out]
