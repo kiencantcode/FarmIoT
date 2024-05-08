@@ -1,5 +1,3 @@
-//day la nhanh cua em Toan
-
 print("Sensors and Actuators")
 
 import time
@@ -16,11 +14,18 @@ def getPort():
             splitPort = strPort.split(" ")
             commPort = (splitPort[0])
     return commPort
+    # return "/dev/ttyUSB1"
 
-portName = "/dev/ttyUSB1"
+portName = getPort()
 print(portName)
 
 
+
+try:
+    ser = serial.Serial(port=portName, baudrate=9600)
+    print("Open successfully")
+except:
+    print("Can not open the port")
 
 def serial_read_data(ser):
     bytesToRead = ser.inWaiting()
@@ -36,7 +41,24 @@ def serial_read_data(ser):
             return -1
     return 0
 
+'''
+id , function, data[2:5], crc[6:7]
+mixer 234 (available)
 
+function: 
+    6 : wr
+    3 : rd
+
+data:
+    0, 0, 0, 255 -> ON
+    0, 0, 0, 0 -> OFF
+
+crc: 
+    0, 6, 0, 0, 0, 255 -> hexMODBUS -> 5BC8 -> C8 5B -> 200 91
+    ([0, 6, 0, 0, 0, 255]) = [200, 91]
+
+
+'''
 
 relay1_ON  = [0, 6, 0, 0, 0, 255, 200, 91]
 relay1_OFF = [0, 6, 0, 0, 0, 0, 136, 27]
@@ -50,25 +72,11 @@ def setDevice1(state):
     print(serial_read_data(ser))
 
 while True:
-    setDevice1(True)
-    time.sleep(2)
-    setDevice1(False)
-    time.sleep(2)
+     setDevice1(True)
+     time.sleep(2)
+     setDevice1(False)
+     time.sleep(2)
 
-
-def serial_read_data(ser):
-    bytesToRead = ser.inWaiting()
-    if bytesToRead > 0:
-        out = ser.read(bytesToRead)
-        data_array = [b for b in out]
-        print(data_array)
-        if len(data_array) >= 7:
-            array_size = len(data_array)
-            value = data_array[array_size - 4] * 256 + data_array[array_size - 3]
-            return value
-        else:
-            return -1
-    return 0
 
 soil_temperature =[1, 3, 0, 6, 0, 1, 100, 11]
 def readTemperature():
