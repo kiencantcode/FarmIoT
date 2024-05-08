@@ -41,24 +41,7 @@ def serial_read_data(ser):
             return -1
     return 0
 
-'''
-id , function, data[2:5], crc[6:7]
-mixer 234 (available)
 
-function: 
-    6 : wr
-    3 : rd
-
-data:
-    0, 0, 0, 255 -> ON
-    0, 0, 0, 0 -> OFF
-
-crc: 
-    0, 6, 0, 0, 0, 255 -> hexMODBUS -> 5BC8 -> C8 5B -> 200 91
-    ([0, 6, 0, 0, 0, 255]) = [200, 91]
-
-
-'''
 
 relay1_ON  = [0, 6, 0, 0, 0, 255, 200, 91]
 relay1_OFF = [0, 6, 0, 0, 0, 0, 136, 27]
