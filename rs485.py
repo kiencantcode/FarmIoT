@@ -22,11 +22,21 @@ print(portName)
 
 
 
-try:
-    ser = serial.Serial(port=portName, baudrate=115200)
-    print("Open successfully")
-except:
-    print("Can not open the port")
+def serial_read_data(ser):
+    bytesToRead = ser.inWaiting()
+    if bytesToRead > 0:
+        out = ser.read(bytesToRead)
+        data_array = [b for b in out]
+        print(data_array)
+        if len(data_array) >= 7:
+            array_size = len(data_array)
+            value = data_array[array_size - 4] * 256 + data_array[array_size - 3]
+            return value
+        else:
+            return -1
+    return 0
+
+
 
 relay1_ON  = [0, 6, 0, 0, 0, 255, 200, 91]
 relay1_OFF = [0, 6, 0, 0, 0, 0, 136, 27]
